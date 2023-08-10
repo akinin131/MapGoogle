@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.GoogleMapsApi" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    </style>
+
+    <style name="Theme.GoogleMapsApi" parent="Base.Theme.GoogleMapsApi" />
+</resources>
