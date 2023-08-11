@@ -29,6 +29,7 @@ class DataModule {
         ).build()
     }
 
+
     @Provides
     fun provideCoordinatesDao(appDatabase: AppDatabase): CoordinatesDao {
         return appDatabase.nameDao()

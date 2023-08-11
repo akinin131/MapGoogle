@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.data.dao.CoordinatesDao
 import com.example.domain.model.CoordinatesModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Database(entities = [CoordinatesModel::class,], version = 1)
 abstract class AppDatabase : RoomDatabase() {

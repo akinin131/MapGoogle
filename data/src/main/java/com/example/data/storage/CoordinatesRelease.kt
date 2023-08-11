@@ -10,6 +10,6 @@ class CoordinatesRelease @Inject constructor(private val coordinatesDao: Coordin
     }
 
     override suspend fun getCoordinates(): List<CoordinatesModel> {
-        TODO("Not yet implemented")
+        return coordinatesDao.getAllNotes()
     }
 }

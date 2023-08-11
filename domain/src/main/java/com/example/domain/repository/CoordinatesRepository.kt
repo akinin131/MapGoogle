@@ -6,5 +6,5 @@ interface CoordinatesRepository {
 
     suspend fun addCoordinates(coordinates: CoordinatesModel)
 
-    suspend fun getAnswersForQuestion(): List<CoordinatesModel>
+    suspend fun getCoordinates(): List<CoordinatesModel>
 }

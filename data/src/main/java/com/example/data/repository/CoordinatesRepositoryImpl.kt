@@ -10,7 +10,7 @@ class CoordinatesRepositoryImpl @Inject constructor (private val coordinatesInte
         return coordinatesInterface.addCoordinates(coordinates)
     }
 
-    override suspend fun getAnswersForQuestion(): List<CoordinatesModel> {
-        TODO("Not yet implemented")
+    override suspend fun getCoordinates(): List<CoordinatesModel> {
+        return coordinatesInterface.getCoordinates()
     }
 }

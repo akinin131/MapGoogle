@@ -7,5 +7,18 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.googlemapsapi.fragment.MapFragment"
-        android:label="MapFragment" />
+        android:label="MapFragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_listCoordinates"
+            app:destination="@id/listCoordinates" />
+    </fragment>
+    <fragment
+        android:id="@+id/listCoordinates"
+        android:name="com.example.googlemapsapi.fragment.ListCoordinates"
+        android:label="fragment_list_coordinates"
+        tools:layout="@layout/fragment_list_coordinates" >
+        <action
+            android:id="@+id/action_listCoordinates_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
 </navigation>

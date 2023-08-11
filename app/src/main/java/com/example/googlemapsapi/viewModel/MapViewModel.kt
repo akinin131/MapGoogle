@@ -9,7 +9,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel @Inject constructor (private val saveUseCase: SaveCoordinatesUseCase) : ViewModel() {
+class MapViewModel  @Inject constructor(
+    private val saveUseCase: SaveCoordinatesUseCase
+) : ViewModel() {
 
     fun saveTest(latitude: Double, longitude: Double) {
         viewModelScope.launch {
