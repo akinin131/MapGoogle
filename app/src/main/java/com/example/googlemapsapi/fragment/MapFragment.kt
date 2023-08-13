@@ -7,13 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.example.domain.model.CoordinatesModel
 import com.example.googlemapsapi.R
 import com.example.googlemapsapi.databinding.FragmentMapBinding
+import com.example.googlemapsapi.databinding.PreviewdialogBinding
+import com.example.googlemapsapi.viewModel.ListViewModel
 import com.example.googlemapsapi.viewModel.MapViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,7 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +30,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapBinding
     private val mapViewModel: MapViewModel by viewModels()
+    private val listViewModel: ListViewModel by viewModels()
     private var savedCameraPosition: CameraPosition? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,61 +53,65 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition")
+
+        listViewModel.getAllCoordinates()
+    }
+    private fun addMarkersFromViewModel(coordinatesList: List<CoordinatesModel>) {
+        for (coordinates in coordinatesList) {
+            val markerOptions = MarkerOptions().position(LatLng(coordinates.latitude, coordinates.longitude))
+            mMap.addMarker(markerOptions)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Restore camera position if available
-        if (savedCameraPosition != null) {
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(savedCameraPosition!!))
-        } else {
-            val sydney = LatLng(-34.0, 151.0)
-            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+         // Используем ListViewModel для получения координат
+
+        listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { coordinatesList ->
+            addMarkersFromViewModel(coordinatesList) // Устанавливаем маркеры на карту
         }
 
         mMap.setOnCameraIdleListener {
             savedCameraPosition = mMap.cameraPosition
         }
-
     }
+
 
     @SuppressLint("SetTextI18n")
     fun showDialog(latitude: Double, longitude: Double) {
         val dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.previewdialog)
-        val editTextAddQuestion: EditText = dialog.findViewById(R.id.editTextAddQuestion)
-        val editTextAnswer: EditText = dialog.findViewById(R.id.editTextAnswer)
-        val btnClose: TextView = dialog.findViewById(R.id.btnclose)
-        val btnAddToList: Button = dialog.findViewById(R.id.buttondiolog)
-        editTextAddQuestion.setText(editTextAddQuestion.text.toString() + latitude)
-        editTextAnswer.setText(editTextAnswer.text.toString() + longitude);
-        val sydney = LatLng( latitude, longitude)
+        val dialogBinding = PreviewdialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        val degreesSymbol = "\u00B0"
+
+        dialogBinding.editTextAddQuestion.setText("${dialogBinding.editTextAddQuestion.text}$latitude$degreesSymbol")
+        dialogBinding.editTextAnswer.setText("${dialogBinding.editTextAnswer.text}$longitude$degreesSymbol")
+
+        val sydney = LatLng(latitude, longitude)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        btnClose.setOnClickListener {
+
+        dialogBinding.btnclose.setOnClickListener {
             dialog.dismiss()
         }
 
-        btnAddToList.setOnClickListener {
-            val questionText = editTextAddQuestion.text.toString()
-            val answerText = editTextAnswer.text.toString()
+        dialogBinding.buttondiolog.setOnClickListener {
+            val questionText = dialogBinding.editTextAddQuestion.text.toString()
+            val answerText = dialogBinding.editTextAnswer.text.toString()
 
             if (questionText.isNotEmpty() && answerText.isNotEmpty()) {
-
-                Toast.makeText(requireContext(), "Вопрос и ответ добавлены", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Координаты сохранены", Toast.LENGTH_SHORT).show()
                 mapViewModel.saveTest(latitude,longitude)
                 dialog.dismiss()
-
             } else {
-                Toast.makeText(requireContext(), "Введите вопрос и ответ", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Координаты не сохранены", Toast.LENGTH_SHORT).show()
             }
         }
 
         dialog.show()
     }
+
 
     fun getMapCenter(): LatLng {
         val bounds = mMap.projection.visibleRegion.latLngBounds

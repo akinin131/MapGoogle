@@ -10,5 +10,9 @@
         android:id="@+id/ic_people"
         android:title="Список координат"
         tools:ignore="HardcodedText" />
+    <item
+        android:id="@+id/ic_json"
+        android:title="Начать принимать json"
+        tools:ignore="HardcodedText" />
 
 </menu>

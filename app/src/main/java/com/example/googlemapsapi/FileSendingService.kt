@@ -1,44 +1,63 @@
-package com.example.googlemapsapi.viewModel
+package com.example.googlemapsapi
 
+import android.app.Service
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.domain.model.CoordinatesModel
-import com.example.domain.usecase.SaveCoordinatesUseCase
 import com.example.domain.model.PointData
+import com.example.domain.usecase.SaveCoordinatesUseCase
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.ServerSocket
 import javax.inject.Inject
 
-@HiltViewModel
-class MapViewModel  @Inject constructor(
-    private val saveUseCase: SaveCoordinatesUseCase
-) : ViewModel() {
 
-    fun saveTest(latitude: Double, longitude: Double) {
-        viewModelScope.launch {
-            val test = CoordinatesModel(latitude = latitude, longitude = longitude)
-            saveUseCase.execute(test)
+@AndroidEntryPoint
+class FileSendingService : Service() {
 
-        }
+    @Inject
+    lateinit var saveUseCase: SaveCoordinatesUseCase
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val intentFilter = IntentFilter("com.yourapp.FILE_SENDING")
+
+        val notification = createNotification(this)
+        startForeground(NOTIFICATION_ID, notification)
+
+        return START_STICKY
+    }
+    private val NOTIFICATION_CHANNEL_ID = "FileSendingChannel"
+    private val NOTIFICATION_ID = 1
+    override fun onCreate() {
+        super.onCreate()
+        startTcpServer()
     }
 
-    private val TAG = "MapViewModel" // Добавлен тег для логирования
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
 
-    private val serverPort = 49153 // Здесь укажите порт, на котором будет запущен сервер
-    // LiveData для уведомления об успешной загрузке файла
+    private val TAG = "MapViewModel"
+
+    private val serverPort = 49153
+
     private val _fileLoadedLiveData = MutableLiveData<Unit>()
     val fileLoadedLiveData: LiveData<Unit> = _fileLoadedLiveData
-     fun startTcpServer() {
-        viewModelScope.launch(Dispatchers.IO) {
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun startTcpServer() {
+        GlobalScope.launch(Dispatchers.IO) {
             val serverSocket = ServerSocket(serverPort)
             Log.d(TAG, "Server started on port $serverPort")
             while (true) {
@@ -73,7 +92,6 @@ class MapViewModel  @Inject constructor(
                         _fileLoadedLiveData.postValue(Unit)
 
                     } catch (e: JsonSyntaxException) {
-                        // If parsing as array fails, try parsing as object
                         try {
                             val locationData = gson.fromJson(jsonData, PointData::class.java)
 
@@ -95,8 +113,5 @@ class MapViewModel  @Inject constructor(
             }
         }
     }
-
-
-
 }
 

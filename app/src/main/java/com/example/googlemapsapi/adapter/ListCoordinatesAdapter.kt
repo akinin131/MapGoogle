@@ -13,14 +13,15 @@ import com.example.googlemapsapi.databinding.ItemBinding
 class ListCoordinatesAdapter: RecyclerView.Adapter<ListCoordinatesAdapter.CoordinatesViewHolder>() {
 
     private var listTest = emptyList<CoordinatesModel>()
-    class CoordinatesViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CoordinatesViewHolder (itemView: View) : ViewHolder(itemView) {
         private val binding = ItemBinding.bind(itemView)
-
+        val degreesSymbol = "\u00B0"
+        @SuppressLint("SetTextI18n")
         fun bind(test: CoordinatesModel) {
             binding.apply {
                 id.text = test.id.toString()
-                latitude.text = test.latitude.toString()
-                longitude.text = test.longitude.toString()
+                latitude.text = "${test.latitude}$degreesSymbol"
+                longitude.text = "${test.longitude}$degreesSymbol"
 
             }
         }
@@ -38,6 +39,7 @@ class ListCoordinatesAdapter: RecyclerView.Adapter<ListCoordinatesAdapter.Coordi
         val currentTest = listTest[position]
         holder.bind(currentTest)
     }
+
     @SuppressLint("NotifyDataSetChanged")
     fun setList(newTests: List<CoordinatesModel>) {
         listTest = newTests

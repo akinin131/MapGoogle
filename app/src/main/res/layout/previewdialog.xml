@@ -24,7 +24,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-
     <EditText
         android:id="@+id/editTextAddQuestion"
         android:layout_width="match_parent"
@@ -53,7 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:autofillHints="" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttondiolog"
