@@ -13,22 +13,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(private val getUseCase: GetCoordinatesUseCase) : ViewModel() {
-    private val _testsLiveData = MutableLiveData<List<CoordinatesModel>>()
-    val testsLiveData: LiveData<List<CoordinatesModel>> get() = _testsLiveData
+
 
     private val _coordinatesLiveData = MutableLiveData<List<CoordinatesModel>>()
     val coordinatesLiveData: LiveData<List<CoordinatesModel>> get() = _coordinatesLiveData
-
-    fun getAllTests() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val tests = getUseCase.execute()
-                _testsLiveData.postValue(tests)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
 
     fun getAllCoordinates() {
         viewModelScope.launch(Dispatchers.IO) {

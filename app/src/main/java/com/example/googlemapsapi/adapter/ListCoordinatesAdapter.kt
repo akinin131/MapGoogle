@@ -1,6 +1,8 @@
 package com.example.googlemapsapi.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,39 +12,43 @@ import com.example.domain.model.CoordinatesModel
 import com.example.googlemapsapi.R
 import com.example.googlemapsapi.databinding.ItemBinding
 
-class ListCoordinatesAdapter: RecyclerView.Adapter<ListCoordinatesAdapter.CoordinatesViewHolder>() {
+class ListCoordinatesAdapter :
+    RecyclerView.Adapter<ListCoordinatesAdapter.CoordinatesViewHolder>() {
 
-    private var listTest = emptyList<CoordinatesModel>()
-    class CoordinatesViewHolder (itemView: View) : ViewHolder(itemView) {
+    private var listCoordinates = emptyList<CoordinatesModel>()
+
+    class CoordinatesViewHolder(itemView: View) : ViewHolder(itemView) {
         private val binding = ItemBinding.bind(itemView)
-        val degreesSymbol = "\u00B0"
-        @SuppressLint("SetTextI18n")
-        fun bind(test: CoordinatesModel) {
-            binding.apply {
-                id.text = test.id.toString()
-                latitude.text = "${test.latitude}$degreesSymbol"
-                longitude.text = "${test.longitude}$degreesSymbol"
+        private val degreesSymbol = "\u00B0"
 
+        @SuppressLint("SetTextI18n")
+        fun bind(context: Context, coordinates: CoordinatesModel) {
+            binding.apply {
+                id.text = "${context.getString(R.string.dot) + " "} ${coordinates.id}"
+                latitude.text = "${coordinates.latitude}$degreesSymbol"
+                longitude.text = "${coordinates.longitude}$degreesSymbol"
             }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoordinatesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
         return CoordinatesViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return listTest.size
+        return listCoordinates.size
     }
 
     override fun onBindViewHolder(holder: CoordinatesViewHolder, position: Int) {
-        val currentTest = listTest[position]
-        holder.bind(currentTest)
+        val currentTest = listCoordinates[position]
+        val context = holder.itemView.context
+        holder.bind(context, currentTest)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(newTests: List<CoordinatesModel>) {
-        listTest = newTests
+    fun setList(newList: List<CoordinatesModel>) {
+        listCoordinates = newList
         notifyDataSetChanged()
     }
 }

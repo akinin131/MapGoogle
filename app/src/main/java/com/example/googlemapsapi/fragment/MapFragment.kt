@@ -15,7 +15,6 @@ import com.example.googlemapsapi.databinding.FragmentMapBinding
 import com.example.googlemapsapi.databinding.PreviewdialogBinding
 import com.example.googlemapsapi.viewModel.ListViewModel
 import com.example.googlemapsapi.viewModel.MapViewModel
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -56,17 +55,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         listViewModel.getAllCoordinates()
     }
+
     private fun addMarkersFromViewModel(coordinatesList: List<CoordinatesModel>) {
         for (coordinates in coordinatesList) {
-            val markerOptions = MarkerOptions().position(LatLng(coordinates.latitude, coordinates.longitude))
+            val markerOptions =
+                MarkerOptions().position(LatLng(coordinates.latitude, coordinates.longitude))
             mMap.addMarker(markerOptions)
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-         // Используем ListViewModel для получения координат
 
         listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { coordinatesList ->
             addMarkersFromViewModel(coordinatesList) // Устанавливаем маркеры на карту
@@ -77,7 +76,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     fun showDialog(latitude: Double, longitude: Double) {
         val dialog = Dialog(requireContext())
@@ -86,8 +84,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val degreesSymbol = "\u00B0"
 
-        dialogBinding.editTextAddQuestion.setText("${dialogBinding.editTextAddQuestion.text}$latitude$degreesSymbol")
-        dialogBinding.editTextAnswer.setText("${dialogBinding.editTextAnswer.text}$longitude$degreesSymbol")
+        dialogBinding.editTextAddLatitude.setText("${dialogBinding.editTextAddLatitude.text}$latitude$degreesSymbol")
+        dialogBinding.editTextLongitude.setText("${dialogBinding.editTextLongitude.text}$longitude$degreesSymbol")
 
         val sydney = LatLng(latitude, longitude)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
@@ -96,22 +94,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             dialog.dismiss()
         }
 
-        dialogBinding.buttondiolog.setOnClickListener {
-            val questionText = dialogBinding.editTextAddQuestion.text.toString()
-            val answerText = dialogBinding.editTextAnswer.text.toString()
+        dialogBinding.buttonSave.setOnClickListener {
+            val questionText = dialogBinding.editTextAddLatitude.text.toString()
+            val answerText = dialogBinding.editTextLongitude.text.toString()
 
             if (questionText.isNotEmpty() && answerText.isNotEmpty()) {
                 Toast.makeText(requireContext(), "Координаты сохранены", Toast.LENGTH_SHORT).show()
-                mapViewModel.saveTest(latitude,longitude)
+                mapViewModel.saveTest(latitude, longitude)
                 dialog.dismiss()
             } else {
-                Toast.makeText(requireContext(), "Координаты не сохранены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Координаты не сохранены", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         dialog.show()
     }
-
 
     fun getMapCenter(): LatLng {
         val bounds = mMap.projection.visibleRegion.latLngBounds

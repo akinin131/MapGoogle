@@ -9,7 +9,6 @@ class CoordinatesRepositoryImpl @Inject constructor (private val coordinatesInte
     override suspend fun addCoordinates(coordinates: CoordinatesModel) {
         return coordinatesInterface.addCoordinates(coordinates)
     }
-
     override suspend fun getCoordinates(): List<CoordinatesModel> {
         return coordinatesInterface.getCoordinates()
     }

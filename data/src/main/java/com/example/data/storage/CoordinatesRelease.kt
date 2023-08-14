@@ -8,10 +8,7 @@ class CoordinatesRelease @Inject constructor(private val coordinatesDao: Coordin
     override suspend fun addCoordinates(coordinatesModel: CoordinatesModel) {
         return coordinatesDao.insert(coordinatesModel)
     }
-
-    
     override suspend fun getCoordinates(): List<CoordinatesModel> {
         return coordinatesDao.getAllNotes()
     }
-
 }

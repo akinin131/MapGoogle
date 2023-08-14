@@ -8,11 +8,11 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 
 fun createNotification(context: Context): Notification {
-    val notificationChannelId = "FileSendingChannel" // Используйте правильный ID канала
+    val notificationChannelId = "FileSendingChannel"
 
-    // Создайте канал уведомления (для Android 8 и выше)
-    val notificationChannel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             notificationChannelId,
             "File Sending Channel",
@@ -21,7 +21,7 @@ fun createNotification(context: Context): Notification {
         notificationManager.createNotificationChannel(channel)
         channel
     } else {
-        null // Если версия Android меньше 8, то канал не требуется
+        null
     }
 
     // Создайте уведомление для Foreground Service

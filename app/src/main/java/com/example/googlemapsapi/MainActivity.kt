@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.googlemapsapi.databinding.ActivityMainBinding
 import com.example.googlemapsapi.fragment.MapFragment
-import com.example.googlemapsapi.viewModel.MapViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -24,8 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
-    private val mapViewModel: MapViewModel by viewModels()
-    private var isServerRunning = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,14 +32,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
-
-        mapViewModel.fileLoadedLiveData.observe(this) {
-            Toast.makeText(this, "Файл загружен", Toast.LENGTH_LONG).show()
-        }
-        val jsonData = intent.getStringExtra("json_data")
-        if (jsonData != null) {
-            jsonStart()
-        }
 
         val fileSendingIntent = Intent(this, FileSendingService::class.java)
         ContextCompat.startForegroundService(this, fileSendingIntent)
@@ -57,13 +46,11 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.ic_home -> navigateToMapFragmentAndShowDialog()
-            R.id.ic_people -> navigateToListCoordinatesFragment()
-            R.id.ic_json -> jsonStart()
-            // Другие варианты MenuItem
+            R.id.ic_save_coordinates -> navigateToMapFragmentAndShowDialog()
+            R.id.ic_list_coordinates -> navigateToListCoordinatesFragment()
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -93,20 +80,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
-    private fun jsonStart() {
-        if (!isServerRunning) {
-            val currentFragment = getCurrentFragment()
-            if (currentFragment is MapFragment) {
-                mapViewModel.startTcpServer()
-                isServerRunning = true
-                Toast.makeText(this, "Порт активен", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(this, "Порт уже активен", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun getCurrentFragment(): Fragment? {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

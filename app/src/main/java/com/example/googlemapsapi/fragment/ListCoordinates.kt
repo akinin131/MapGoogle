@@ -37,10 +37,10 @@ class ListCoordinates : Fragment() {
         adapter = ListCoordinatesAdapter()
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-        listViewModel.getAllTests()
+        listViewModel.getAllCoordinates()
 
-        listViewModel.testsLiveData.observe(viewLifecycleOwner) { tests ->
-            adapter.setList(tests)
+        listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { lestCoordinates ->
+            adapter.setList(lestCoordinates)
         }
     }
 }

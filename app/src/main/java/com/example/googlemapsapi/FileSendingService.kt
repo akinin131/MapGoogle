@@ -22,7 +22,6 @@ import java.io.InputStreamReader
 import java.net.ServerSocket
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class FileSendingService : Service() {
 
@@ -30,14 +29,14 @@ class FileSendingService : Service() {
     lateinit var saveUseCase: SaveCoordinatesUseCase
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val intentFilter = IntentFilter("com.yourapp.FILE_SENDING")
+        IntentFilter("com.yourapp.FILE_SENDING")
 
         val notification = createNotification(this)
         startForeground(NOTIFICATION_ID, notification)
 
         return START_STICKY
     }
-    private val NOTIFICATION_CHANNEL_ID = "FileSendingChannel"
+
     private val NOTIFICATION_ID = 1
     override fun onCreate() {
         super.onCreate()

@@ -8,10 +8,6 @@ import dagger.hilt.EntryPoint
 
 @Database(entities = [CoordinatesModel::class,], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun nameDao(): CoordinatesDao
-
-
-
 
 }
