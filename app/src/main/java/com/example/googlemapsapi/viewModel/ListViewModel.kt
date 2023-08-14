@@ -12,17 +12,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListViewModel @Inject constructor(private val getUseCase: GetCoordinatesUseCase) : ViewModel() {
+class ListViewModel @Inject constructor(private val getCoordinatesUseCase: GetCoordinatesUseCase) : ViewModel() {
 
-
-    private val _coordinatesLiveData = MutableLiveData<List<CoordinatesModel>>()
-    val coordinatesLiveData: LiveData<List<CoordinatesModel>> get() = _coordinatesLiveData
+    private val coordinatesData = MutableLiveData<List<CoordinatesModel>>()
+    val coordinatesLiveData: LiveData<List<CoordinatesModel>> get() = coordinatesData
 
     fun getAllCoordinates() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val coordinates = getUseCase.execute()
-                _coordinatesLiveData.postValue(coordinates)
+                val coordinates = getCoordinatesUseCase.execute()
+                coordinatesData.postValue(coordinates)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

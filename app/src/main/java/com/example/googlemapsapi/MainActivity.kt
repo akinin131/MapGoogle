@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.googlemapsapi.databinding.ActivityMainBinding
 import com.example.googlemapsapi.fragment.MapFragment
+import com.example.googlemapsapi.service.FileSendingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.pow
 import kotlin.math.roundToInt

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.GoogleMapsApi" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Base.Theme.GoogleMapsApi" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
 
     </style>
 

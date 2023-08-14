@@ -24,36 +24,43 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextAddLatitude"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutAddLatitude"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
-        android:background="@drawable/style_edit_text"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/editTextLongitude"
+        <EditText
+            android:id="@+id/editTextAddLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/style_edit_text"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutAddLongitude"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:autofillHints=""
-        android:background="@drawable/style_edit_text"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatButton
+        <!-- Используем TextInputEditText внутри TextInputLayout -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="This is Hint"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+<androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="50dp"

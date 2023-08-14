@@ -1,4 +1,4 @@
-package com.example.googlemapsapi
+package com.example.googlemapsapi.service
 
 import android.app.Service
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.domain.model.CoordinatesModel
 import com.example.domain.model.PointData
 import com.example.domain.usecase.SaveCoordinatesUseCase
+import com.example.googlemapsapi.tcp.FileLoadedReceiver
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +28,7 @@ class FileSendingService : Service() {
 
     @Inject
     lateinit var saveUseCase: SaveCoordinatesUseCase
+    private val fileLoadedReceiver = FileLoadedReceiver()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         IntentFilter("com.yourapp.FILE_SENDING")
@@ -41,8 +43,13 @@ class FileSendingService : Service() {
     override fun onCreate() {
         super.onCreate()
         startTcpServer()
+        registerReceiver(fileLoadedReceiver, IntentFilter("com.yourapp.FILE_LOADED"))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(fileLoadedReceiver)
+    }
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -88,6 +95,10 @@ class FileSendingService : Service() {
 
                             saveUseCase.execute(coordinatesModel)
                         }
+
+                        // Завершение загрузки файла, отправляем Broadcast
+                        val fileLoadedIntent = Intent("com.yourapp.FILE_LOADED")
+                        sendBroadcast(fileLoadedIntent)
                         _fileLoadedLiveData.postValue(Unit)
 
                     } catch (e: JsonSyntaxException) {
@@ -103,6 +114,9 @@ class FileSendingService : Service() {
                         } catch (e: JsonSyntaxException) {
                             Log.e(TAG, "Error parsing JSON data: ${e.message}", e)
                         }
+                        // Завершение загрузки файла, отправляем Broadcast
+                        val fileLoadedIntent = Intent("com.yourapp.FILE_LOADED")
+                        sendBroadcast(fileLoadedIntent)
                     }
 
                     socket.close()

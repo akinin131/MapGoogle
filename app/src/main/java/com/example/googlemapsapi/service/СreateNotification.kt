@@ -1,4 +1,4 @@
-package com.example.googlemapsapi
+package com.example.googlemapsapi.service
 
 import android.app.Notification
 import android.app.NotificationChannel

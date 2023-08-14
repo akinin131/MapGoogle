@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.domain.model.CoordinatesModel
@@ -17,7 +18,7 @@ class ListCoordinatesAdapter :
 
     private var listCoordinates = emptyList<CoordinatesModel>()
 
-    class CoordinatesViewHolder(itemView: View) : ViewHolder(itemView) {
+    class CoordinatesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemBinding.bind(itemView)
         private val degreesSymbol = "\u00B0"
 
@@ -46,9 +47,9 @@ class ListCoordinatesAdapter :
         holder.bind(context, currentTest)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setList(newList: List<CoordinatesModel>) {
+        val diffResult = DiffUtil.calculateDiff(CoordinatesDiffCallback(listCoordinates, newList))
         listCoordinates = newList
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 }
