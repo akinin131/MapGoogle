@@ -1,4 +1,4 @@
-package com.example.googlemapsapi.service
+package com.example.googlemapsapi.notification
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -24,11 +24,9 @@ fun createNotification(context: Context): Notification {
         null
     }
 
-    // Создайте уведомление для Foreground Service
     val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)
         .setContentTitle("File Sending Service")
         .setContentText("Waiting for file sending events")
-    // Замените на вашу иконку
 
     return notificationBuilder.build()
 }

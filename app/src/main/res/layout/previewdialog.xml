@@ -31,16 +31,17 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextAddLatitude"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/style_edit_text"
             android:ems="10"
+            android:hint="@string/latitude"
             android:inputType="numberDecimal"
-            android:padding="10dp"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -48,15 +49,18 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutAddLongitude"
         android:layout_width="match_parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="50dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_height="wrap_content">
 
-        <!-- Используем TextInputEditText внутри TextInputLayout -->
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextLongitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="This is Hint"/>
+            android:hint="@string/longitude"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -64,9 +68,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="50dp"
+    android:layout_margin="50dp"
         android:layout_marginBottom="15dp"
         android:ems="10"
         android:padding="15dp"

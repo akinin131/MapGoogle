@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -19,7 +20,7 @@
         android:theme="@style/Theme.GoogleMapsApi"
         tools:targetApi="31">
         <receiver
-            android:name=".tcp.DeleteNotificationReceiver"
+            android:name=".util.DeleteNotificationReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -27,7 +28,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".tcp.FileLoadedReceiver"
+            android:name=".util.FileLoadedReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

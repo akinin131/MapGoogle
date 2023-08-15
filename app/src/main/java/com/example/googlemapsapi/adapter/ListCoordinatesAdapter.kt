@@ -18,7 +18,7 @@ class ListCoordinatesAdapter :
 
     private var listCoordinates = emptyList<CoordinatesModel>()
 
-    class CoordinatesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CoordinatesViewHolder(itemView: View) : ViewHolder(itemView) {
         private val binding = ItemBinding.bind(itemView)
         private val degreesSymbol = "\u00B0"
 
