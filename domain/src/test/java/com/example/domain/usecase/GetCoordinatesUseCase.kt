@@ -4,8 +4,13 @@ import com.example.domain.model.CoordinatesModel
 import com.example.domain.repository.CoordinatesRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+<<<<<<< HEAD
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
+=======
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+>>>>>>> 2e3ab7e (test commit two)
 import org.junit.Test
 import org.mockito.Mockito.`when`
 
