@@ -28,9 +28,9 @@
         android:id="@+id/textInputLayoutAddLatitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="40dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -38,8 +38,6 @@
             android:id="@+id/editTextAddLatitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/style_edit_text"
-            android:ems="10"
             android:hint="@string/latitude"
             android:inputType="numberDecimal"
             />
@@ -49,9 +47,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutAddLongitude"
         android:layout_width="match_parent"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="40dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_height="wrap_content">
 
@@ -60,6 +58,7 @@
             android:id="@+id/editTextLongitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:hint="@string/longitude"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +67,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-    android:layout_margin="50dp"
+      android:layout_margin="50dp"
         android:layout_marginBottom="15dp"
         android:ems="10"
         android:padding="15dp"

@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback  {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapBinding

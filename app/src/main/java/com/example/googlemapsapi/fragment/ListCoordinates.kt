@@ -1,14 +1,19 @@
 package com.example.googlemapsapi.fragment
 
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googlemapsapi.adapter.ListCoordinatesAdapter
 import com.example.googlemapsapi.databinding.FragmentListCoordinatesBinding
+import com.example.googlemapsapi.util.DataUpdatedListReceiver
 import com.example.googlemapsapi.viewModel.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +27,7 @@ class ListCoordinates : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentListCoordinatesBinding.inflate(inflater, container, false)
         return binding.root
@@ -39,8 +44,32 @@ class ListCoordinates : Fragment() {
         recyclerView.adapter = adapter
         listViewModel.getAllCoordinates()
 
-        listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { lestCoordinates ->
-            adapter.setList(lestCoordinates)
+        listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { newData ->
+            adapter.setList(newData)
         }
+    }
+
+    private val dataUpdatedReceiver = DataUpdatedListReceiver {
+
+        updateList()
+
+    }
+
+    private fun updateList() {
+        listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { newData ->
+            adapter.setList(newData)
+        }
+        listViewModel.getAllCoordinates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val filter = IntentFilter("com.yourapp.DATA_UPDATED")
+        requireContext().registerReceiver(dataUpdatedReceiver, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(dataUpdatedReceiver)
     }
 }

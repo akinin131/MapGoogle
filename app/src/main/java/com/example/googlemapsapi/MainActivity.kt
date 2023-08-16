@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.googlemapsapi.databinding.ActivityMainBinding
 import com.example.googlemapsapi.fragment.MapFragment
 import com.example.googlemapsapi.service.FileSendingService
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
+
+        setupActionBarWithNavController(navController)
 
         val fileSendingIntent = Intent(this, FileSendingService::class.java)
         ContextCompat.startForegroundService(this, fileSendingIntent)

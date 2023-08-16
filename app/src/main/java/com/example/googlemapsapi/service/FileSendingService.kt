@@ -31,14 +31,12 @@ class FileSendingService : Service() {
     @Inject
     lateinit var saveUseCase: SaveCoordinatesUseCase
     private val fileLoadedReceiver = FileLoadedReceiver()
-
     private val dataReceiver: DataReceiver = JsonDataReceiver()
-
     private val TAG = "FileSendingService"
     private val serverPort = 49153
 
-    private val _fileLoadedLiveData = MutableLiveData<Unit>()
-    val fileLoadedLiveData: LiveData<Unit> = _fileLoadedLiveData
+    private val dataLoadedLiveData = MutableLiveData<Unit>()
+    val fileLoadedLiveData: LiveData<Unit> = dataLoadedLiveData
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = createNotification(this)
@@ -52,11 +50,6 @@ class FileSendingService : Service() {
         super.onCreate()
         startTcpServer()
         registerReceiver(fileLoadedReceiver, IntentFilter("com.yourapp.FILE_LOADED"))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(fileLoadedReceiver)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -116,12 +109,14 @@ class FileSendingService : Service() {
             )
 
             saveUseCase.execute(coordinatesModel)
+            val intent = Intent("com.yourapp.DATA_UPDATED")
+            sendBroadcast(intent)
         }
 
         sendFileLoadedBroadcast()
     }
 
-     private suspend fun processSingleLocationData(locationData: PointData) {
+    private suspend fun processSingleLocationData(locationData: PointData) {
         val coordinatesModel = CoordinatesModel(
             latitude = locationData.point.latitude.toDouble(),
             longitude = locationData.point.longitude.toDouble()
@@ -129,11 +124,24 @@ class FileSendingService : Service() {
 
         saveUseCase.execute(coordinatesModel)
         sendFileLoadedBroadcast()
+        val intent = Intent("com.yourapp.DATA_UPDATED")
+        sendBroadcast(intent)
     }
 
     private fun sendFileLoadedBroadcast() {
         val fileLoadedIntent = Intent("com.yourapp.FILE_LOADED")
         sendBroadcast(fileLoadedIntent)
-        _fileLoadedLiveData.postValue(Unit)
+        dataLoadedLiveData.postValue(Unit)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(fileLoadedReceiver)
+    }
+
 }
+
+
+
+
+

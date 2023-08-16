@@ -8,7 +8,7 @@ import com.example.domain.model.CoordinatesModel
 
 @Dao
 interface CoordinatesDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(noteModel: CoordinatesModel)
     @Query("SELECT * FROM CoordinatesModel")
     fun getAllNotes(): List<CoordinatesModel>
