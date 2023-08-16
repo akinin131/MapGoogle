@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.domain.model.CoordinatesModel
 import com.example.domain.model.PointData
 import com.example.domain.usecase.SaveCoordinatesUseCase
+import com.example.googlemapsapi.const.Companion.serverPort
 import com.example.googlemapsapi.notification.createNotification
 import com.example.googlemapsapi.util.DataReceiver
 import com.example.googlemapsapi.util.FileLoadedReceiver
@@ -33,7 +34,7 @@ class FileSendingService : Service() {
     private val fileLoadedReceiver = FileLoadedReceiver()
     private val dataReceiver: DataReceiver = JsonDataReceiver()
     private val TAG = "FileSendingService"
-    private val serverPort = 49153
+
 
     private val dataLoadedLiveData = MutableLiveData<Unit>()
     val fileLoadedLiveData: LiveData<Unit> = dataLoadedLiveData
