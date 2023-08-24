@@ -19,14 +19,15 @@ fun createNotification(context: Context): Notification {
             NotificationManager.IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
-        channel
+        return NotificationCompat.Builder(context, notificationChannelId)
+            .setContentTitle("File Sending Service")
+            .setContentText("Waiting for file sending events")
+            .build()
     } else {
-        null
+        return NotificationCompat.Builder(context)
+            .setContentTitle("File Sending Service")
+            .setContentText("Waiting for file sending events")
+            .build()
     }
-
-    val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)
-        .setContentTitle("File Sending Service")
-        .setContentText("Waiting for file sending events")
-
-    return notificationBuilder.build()
 }
+

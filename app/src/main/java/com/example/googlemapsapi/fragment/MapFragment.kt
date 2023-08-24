@@ -1,6 +1,5 @@
 package com.example.googlemapsapi.fragment
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -76,7 +75,6 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     fun showDialog(latitude: Double, longitude: Double) {
         val dialog = Dialog(requireContext())
         val dialogBinding = PreviewdialogBinding.inflate(layoutInflater)
@@ -95,10 +93,10 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
         }
 
         dialogBinding.buttonSave.setOnClickListener {
-            val questionText = dialogBinding.editTextAddLatitude.text.toString()
-            val answerText = dialogBinding.editTextLongitude.text.toString()
+            val latitudeText = dialogBinding.editTextAddLatitude.text.toString()
+            val longitudeText = dialogBinding.editTextLongitude.text.toString()
 
-            if (questionText.isNotEmpty() && answerText.isNotEmpty()) {
+            if (latitudeText.isNotEmpty() && longitudeText.isNotEmpty()) {
                 Toast.makeText(requireContext(), "Координаты сохранены", Toast.LENGTH_SHORT).show()
                 mapViewModel.saveTest(latitude, longitude)
                 dialog.dismiss()

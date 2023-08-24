@@ -7,10 +7,11 @@ import android.content.Intent
 
 class DeleteNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-
-        if (context != null) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.cancel(1)
+        if (intent?.action == "com.example.DELETE_ACTION") {
+            // Ваш код для удаления уведомления
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationId = 1
+            notificationManager.cancel(notificationId)
         }
     }
 }

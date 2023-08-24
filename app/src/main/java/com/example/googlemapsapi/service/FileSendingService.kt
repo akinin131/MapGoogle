@@ -50,7 +50,7 @@ class FileSendingService : Service() {
     override fun onCreate() {
         super.onCreate()
         startTcpServer()
-        registerReceiver(fileLoadedReceiver, IntentFilter("com.yourapp.FILE_LOADED"))
+        registerReceiver(fileLoadedReceiver, IntentFilter("com.example.FILE_LOADED"))
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -110,7 +110,7 @@ class FileSendingService : Service() {
             )
 
             saveUseCase.execute(coordinatesModel)
-            val intent = Intent("com.yourapp.DATA_UPDATED")
+            val intent = Intent("com.example.DATA_UPDATED")
             sendBroadcast(intent)
         }
 
@@ -125,12 +125,12 @@ class FileSendingService : Service() {
 
         saveUseCase.execute(coordinatesModel)
         sendFileLoadedBroadcast()
-        val intent = Intent("com.yourapp.DATA_UPDATED")
+        val intent = Intent("com.example.DATA_UPDATED")
         sendBroadcast(intent)
     }
 
     private fun sendFileLoadedBroadcast() {
-        val fileLoadedIntent = Intent("com.yourapp.FILE_LOADED")
+        val fileLoadedIntent = Intent("com.example.FILE_LOADED")
         sendBroadcast(fileLoadedIntent)
         dataLoadedLiveData.postValue(Unit)
     }

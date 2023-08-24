@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googlemapsapi.adapter.ListCoordinatesAdapter
 import com.example.googlemapsapi.databinding.FragmentListCoordinatesBinding
@@ -64,7 +61,7 @@ class ListCoordinates : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter("com.yourapp.DATA_UPDATED")
+        val filter = IntentFilter("com.example.DATA_UPDATED")
         requireContext().registerReceiver(dataUpdatedReceiver, filter)
     }
 
