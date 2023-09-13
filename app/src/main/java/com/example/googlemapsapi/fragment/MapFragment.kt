@@ -1,6 +1,7 @@
 package com.example.googlemapsapi.fragment
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -44,7 +45,13 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
+        savedCameraPosition = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
+        }else {
+            @Suppress("DEPRECATION")
+            savedInstanceState?.getParcelable("cameraPosition")
+        }
+
 
         listViewModel.getAllCoordinates()
     }
@@ -117,7 +124,12 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
+        savedCameraPosition = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
+        }else {
+            @Suppress("DEPRECATION")
+            savedInstanceState?.getParcelable("cameraPosition")
+        }
     }
 
     override fun onDestroyView() {
