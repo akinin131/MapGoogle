@@ -64,16 +64,16 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = getCurrentFragment()
         if (currentFragment is MapFragment) {
             val mapCenter = currentFragment.getMapCenter()
-            val latitude = formatDecimal(mapCenter.latitude, 4)
-            val longitude = formatDecimal(mapCenter.longitude, 4)
+            val latitude = formatDecimal(mapCenter.latitude)
+            val longitude = formatDecimal(mapCenter.longitude)
             currentFragment.showDialog(latitude, longitude)
         } else {
             Toast.makeText(this, "Перейдите на карту", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun formatDecimal(value: Double, decimalPlaces: Int): Double {
-        val factor = 10.0.pow(decimalPlaces.toDouble())
+    private fun formatDecimal(value: Double): Double {
+        val factor = 10.0.pow(4.0) // Hardcode the decimalPlaces as 4
         return (value * factor).roundToInt() / factor
     }
 
@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     private fun getCurrentFragment(): Fragment? {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

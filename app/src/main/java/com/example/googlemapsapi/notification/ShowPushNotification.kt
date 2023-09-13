@@ -8,7 +8,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.example.googlemapsapi.util.DeleteNotificationReceiver
 import com.example.googlemapsapi.MainActivity
 import com.example.googlemapsapi.R
@@ -29,12 +31,19 @@ fun showPushNotification(context: Context, message: String) {
     }
 
     val intent = Intent(context, MainActivity::class.java)
-    val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
-    // Intent для действия удаления
     val deleteActionIntent = Intent(context, DeleteNotificationReceiver::class.java)
     deleteActionIntent.action = "com.example.DELETE_ACTION"
-    val deleteActionPendingIntent = PendingIntent.getBroadcast(context, 0, deleteActionIntent, 0)
+    val deleteActionPendingIntent = PendingIntent.getBroadcast(context,
+        0,
+        deleteActionIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val deleteAction = NotificationCompat.Action.Builder(
         android.R.drawable.ic_menu_delete, // Иконка действия
         "Delete", // Текст действия
@@ -50,11 +59,13 @@ fun showPushNotification(context: Context, message: String) {
         .addAction(deleteAction) // Добавление кнопки удаления
         .build()
 
-    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator?.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
     } else {
-        vibrator.vibrate(500)
+        @Suppress("DEPRECATION")
+        (vibrator?.vibrate(500))
     }
 
     notificationManager.notify(notificationId, notification)

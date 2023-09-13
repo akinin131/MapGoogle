@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.example.googlemapsapi.service
 
 import android.app.Service
@@ -18,10 +20,7 @@ import com.example.googlemapsapi.util.JsonDataReceiver
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.net.ServerSocket
 import java.net.Socket
 import javax.inject.Inject
@@ -33,7 +32,7 @@ class FileSendingService : Service() {
     lateinit var saveUseCase: SaveCoordinatesUseCase
     private val fileLoadedReceiver = FileLoadedReceiver()
     private val dataReceiver: DataReceiver = JsonDataReceiver()
-    private val TAG = "FileSendingService"
+    private val tag = "FileSendingService"
 
 
     private val dataLoadedLiveData = MutableLiveData<Unit>()
@@ -41,11 +40,11 @@ class FileSendingService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = createNotification(this)
-        startForeground(NOTIFICATION_ID, notification)
+        startForeground(notificationId, notification)
         return START_STICKY
     }
 
-    private val NOTIFICATION_ID = 1
+    private val notificationId = 1
 
     override fun onCreate() {
         super.onCreate()
@@ -60,7 +59,7 @@ class FileSendingService : Service() {
     private fun startTcpServer() {
         GlobalScope.launch(Dispatchers.IO) {
             val serverSocket = ServerSocket(serverPort)
-            Log.d(TAG, "Server started on port $serverPort")
+            Log.d(tag, "Server started on port $serverPort")
 
             while (true) {
                 try {
@@ -68,7 +67,7 @@ class FileSendingService : Service() {
                     handleConnection(socket)
                     socket.close()
                 } catch (e: Exception) {
-                    Log.e(TAG, "Error: ${e.message}", e)
+                    Log.e(tag, "Error: ${e.message}", e)
                 }
             }
         }
@@ -76,13 +75,13 @@ class FileSendingService : Service() {
 
     private suspend fun handleConnection(socket: Socket) {
         val address = socket.inetAddress.hostAddress
-        Log.d(TAG, "Accepted connection from: $address")
+        Log.d(tag, "Accepted connection from: $address")
 
         val inputStream = withContext(Dispatchers.IO) {
             socket.getInputStream()
         }
         val jsonData = dataReceiver.receiveData(inputStream)
-        Log.d(TAG, "Received data: $jsonData")
+        Log.d(tag, "Received data: $jsonData")
 
         processReceivedData(jsonData)
     }
@@ -97,7 +96,7 @@ class FileSendingService : Service() {
                 val locationData = gson.fromJson(jsonData, PointData::class.java)
                 processSingleLocationData(locationData)
             } catch (e: JsonSyntaxException) {
-                Log.e(TAG, "Error parsing JSON data: ${e.message}", e)
+                Log.e(tag, "Error parsing JSON data: ${e.message}", e)
             }
         }
     }

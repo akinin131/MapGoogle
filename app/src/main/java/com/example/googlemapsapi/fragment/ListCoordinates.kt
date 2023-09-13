@@ -2,10 +2,8 @@ package com.example.googlemapsapi.fragment
 
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.googlemapsapi.adapter.ListCoordinatesAdapter
@@ -17,28 +15,30 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ListCoordinates : Fragment() {
 
-    private lateinit var binding: FragmentListCoordinatesBinding
+    private var _binding: FragmentListCoordinatesBinding? = null
+    private val binding get() = _binding!!
     private val listViewModel: ListViewModel by viewModels()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ListCoordinatesAdapter
+    private val recyclerView: RecyclerView by lazy { binding.recyclerView }
+    private val adapter: ListCoordinatesAdapter by lazy { ListCoordinatesAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentListCoordinatesBinding.inflate(inflater, container, false)
+        _binding = FragmentListCoordinatesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
+
     }
 
     private fun init() {
-        adapter = ListCoordinatesAdapter()
-        recyclerView = binding.recyclerView
+
         recyclerView.adapter = adapter
+
         listViewModel.getAllCoordinates()
 
         listViewModel.coordinatesLiveData.observe(viewLifecycleOwner) { newData ->
@@ -49,7 +49,6 @@ class ListCoordinates : Fragment() {
     private val dataUpdatedReceiver = DataUpdatedListReceiver {
 
         updateList()
-
     }
 
     private fun updateList() {
@@ -69,4 +68,10 @@ class ListCoordinates : Fragment() {
         super.onPause()
         requireContext().unregisterReceiver(dataUpdatedReceiver)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
+

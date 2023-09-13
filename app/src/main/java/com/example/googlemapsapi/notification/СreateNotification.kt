@@ -24,10 +24,11 @@ fun createNotification(context: Context): Notification {
             .setContentText("Waiting for file sending events")
             .build()
     } else {
-        return NotificationCompat.Builder(context)
+        return NotificationCompat.Builder(context, "FileSendingChannel")
             .setContentTitle("File Sending Service")
             .setContentText("Waiting for file sending events")
             .build()
+
     }
 }
 

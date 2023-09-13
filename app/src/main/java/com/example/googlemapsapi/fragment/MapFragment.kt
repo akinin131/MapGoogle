@@ -2,10 +2,8 @@ package com.example.googlemapsapi.fragment
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.domain.model.CoordinatesModel
@@ -26,21 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class MapFragment : Fragment(), OnMapReadyCallback  {
 
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: FragmentMapBinding
+    private var _binding: FragmentMapBinding?=null
+    private val binding get() = _binding!!
+    private var savedCameraPosition: CameraPosition? = null
     private val mapViewModel: MapViewModel by viewModels()
     private val listViewModel: ListViewModel by viewModels()
-    private var savedCameraPosition: CameraPosition? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMapBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,7 +44,7 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition")
+        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
 
         listViewModel.getAllCoordinates()
     }
@@ -123,6 +117,11 @@ class MapFragment : Fragment(), OnMapReadyCallback  {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition")
+        savedCameraPosition = savedInstanceState?.getParcelable("cameraPosition", CameraPosition::class.java)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
